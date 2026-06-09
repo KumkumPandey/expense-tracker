@@ -1,14 +1,33 @@
 # Expense Tracker
 
-A full-stack expense tracking application built with React and Node.js.
+A full-stack Expense Tracker application built with React, Node.js, and Express.js. The application allows users to record daily expenses, track spending patterns, filter transactions, and visualize expenses through analytics and charts.
 
-## Features Implemented
+## Features
 
-* Add expenses
-* Store expenses in JSON file
-* Fetch expenses from backend API
-* Display expenses in a table
-* Sort expenses by date
+### Expense Management
+
+* Add new expenses
+* View all expenses in a table
+* Delete existing expenses
+* Sort expenses by date (newest first)
+
+### Filtering
+
+* Filter expenses by category
+* Filter expenses by date range
+
+### Analytics Dashboard
+
+* Total expenses summary
+* Highest expense tracking
+* Total transactions count
+* Expense distribution pie chart
+
+### Additional Features
+
+* Currency formatting (INR)
+* JSON-based data persistence
+* Responsive frontend using React
 
 ## Tech Stack
 
@@ -17,6 +36,7 @@ A full-stack expense tracking application built with React and Node.js.
 * React
 * Vite
 * Axios
+* Recharts
 
 ### Backend
 
@@ -25,32 +45,93 @@ A full-stack expense tracking application built with React and Node.js.
 
 ### Storage
 
-* JSON File
+* JSON File Storage
 
 ## Project Structure
 
+```text
 expense-tracker/
+│
+├── client/
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── ExpenseForm.jsx
+│   │   │   ├── ExpenseTable.jsx
+│   │   │   ├── SummaryCards.jsx
+│   │   │   └── ExpenseChart.jsx
+│   │   ├── services/
+│   │   │   └── api.js
+│   │   └── App.jsx
+│
+├── server/
+│   ├── data/
+│   │   └── expenses.json
+│   └── server.js
+```
 
-* client/ (React Frontend)
-* server/ (Node.js Backend)
+## Installation
 
-## Current Progress
+### Clone Repository
 
-* Backend API setup completed
-* Expense creation API completed
-* Expense listing API completed
-* React form integrated with backend
+```bash
+git clone https://github.com/KumkumPandey/expense-tracker.git
+```
 
-## Upcoming Features
+### Frontend Setup
 
-* Edit expense
-* Delete expense
-* Category filters
-* Date range filters
-* Summary dashboard
-* Expense charts
-* CSV export
-* Budget tracking
+```bash
+cd client
+npm install
+npm run dev
+```
+
+### Backend Setup
+
+```bash
+cd server
+npm install
+node server.js
+```
+
+## API Endpoints
+
+### Get All Expenses
+
+```http
+GET /expenses
+```
+
+### Add Expense
+
+```http
+POST /expenses
+```
+
+### Delete Expense
+
+```http
+DELETE /expenses/:id
+```
+
+## Current Status
+
+Implemented:
+
+* Add Expense
+* View Expenses
+* Delete Expense
+* Category Filter
+* Date Filter
+* Summary Dashboard
+* Pie Chart Analytics
+* Currency Formatting
+
+Planned:
+
+* Edit Expense
+* Form Validation
+* CSV Export
+* Budget Tracking
 
 ## Author
 
