@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1781027889365,
+    "amount": 250,
+    "category": "Food",
+    "date": "2026-06-09",
+    "note": "Burger"
+  },
+  {
+    "id": 1781028364498,
+    "amount": "1",
+    "category": "Transport",
+    "date": "2025-05-20",
+    "note": "hii"
+  },
+  {
+    "id": 1781028367092,
+    "amount": "",
+    "category": "Food",
+    "date": "",
+    "note": ""
+  },
+  {
+    "id": 1781028504780,
+    "amount": "",
+    "category": "Food",
+    "date": "",
+    "note": ""
+  }
+]
