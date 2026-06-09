@@ -51,6 +51,57 @@ app.post("/expenses", async (req, res) => {
   }
 });
 
+app.delete("/expenses/:id", async (req, res) => {
+  try {
+    const expenses = await fs.readJson(FILE_PATH);
+
+    const updatedExpenses = expenses.filter(
+      (expense) => expense.id !== Number(req.params.id)
+    );
+
+    await fs.writeJson(FILE_PATH, updatedExpenses, {
+      spaces: 2,
+    });
+
+    res.json({
+      message: "Expense deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error deleting expense",
+    });
+  }
+});
+
+app.put("/expenses/:id", async (req, res) => {
+  try {
+    const expenses = await fs.readJson(FILE_PATH);
+
+    const updatedExpenses = expenses.map((expense) => {
+      if (expense.id === Number(req.params.id)) {
+        return {
+          ...expense,
+          ...req.body,
+        };
+      }
+
+      return expense;
+    });
+
+    await fs.writeJson(FILE_PATH, updatedExpenses, {
+      spaces: 2,
+    });
+
+    res.json({
+      message: "Expense updated successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error updating expense",
+    });
+  }
+});
+
 const PORT = 8000;
 
 app.listen(PORT, () => {

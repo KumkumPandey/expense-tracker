@@ -1,30 +1,23 @@
 [
   {
-    "id": 1781027889365,
-    "amount": 250,
+    "id": 1781030679315,
+    "amount": "2500",
     "category": "Food",
-    "date": "2026-06-09",
-    "note": "Burger"
+    "date": "2024-10-20",
+    "note": "outing"
   },
   {
-    "id": 1781028364498,
-    "amount": "1",
-    "category": "Transport",
-    "date": "2025-05-20",
-    "note": "hii"
+    "id": 1781030706543,
+    "amount": "1300",
+    "category": "Entertainment",
+    "date": "2024-10-13",
+    "note": "with friends"
   },
   {
-    "id": 1781028367092,
-    "amount": "",
-    "category": "Food",
-    "date": "",
-    "note": ""
-  },
-  {
-    "id": 1781028504780,
-    "amount": "",
-    "category": "Food",
-    "date": "",
-    "note": ""
+    "id": 1781032110055,
+    "amount": "240",
+    "category": "Bills",
+    "date": "2024-11-30",
+    "note": "electricity"
   }
 ]
