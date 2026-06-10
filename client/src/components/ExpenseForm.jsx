@@ -9,23 +9,62 @@ function ExpenseForm() {
     note: "",
   });
 
+  const [error, setError] = useState("");
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    await API.post("/expenses", formData);
+    setError("");
 
-    alert("Expense Added");
+    const today = new Date().toISOString().split("T")[0];
 
-    setFormData({
-      amount: "",
-      category: "Food",
-      date: "",
-      note: "",
-    });
+    if (!formData.amount || Number(formData.amount) <= 0) {
+      setError("Amount must be greater than 0");
+      return;
+    }
+
+    if (!formData.category) {
+      setError("Please select a category");
+      return;
+    }
+
+    if (!formData.date) {
+      setError("Please select a date");
+      return;
+    }
+
+    if (formData.date > today) {
+      setError("Future dates are not allowed");
+      return;
+    }
+
+    try {
+      await API.post("/expenses", formData);
+
+      alert("Expense Added");
+
+      setFormData({
+        amount: "",
+        category: "Food",
+        date: "",
+        note: "",
+      });
+    } catch (error) {
+  console.error(error);
+  setError("Failed to add expense");
+}
   };
 
   return (
     <form onSubmit={handleSubmit}>
+      <h2>Add Expense</h2>
+
+      {error && (
+        <p style={{ color: "red" }}>
+          {error}
+        </p>
+      )}
+
       <input
         type="number"
         placeholder="Amount"
@@ -38,6 +77,9 @@ function ExpenseForm() {
         }
       />
 
+      <br />
+      <br />
+
       <select
         value={formData.category}
         onChange={(e) =>
@@ -47,12 +89,15 @@ function ExpenseForm() {
           })
         }
       >
-        <option>Food</option>
-        <option>Transport</option>
-        <option>Bills</option>
-        <option>Entertainment</option>
-        <option>Other</option>
+        <option value="Food">Food</option>
+        <option value="Transport">Transport</option>
+        <option value="Bills">Bills</option>
+        <option value="Entertainment">Entertainment</option>
+        <option value="Other">Other</option>
       </select>
+
+      <br />
+      <br />
 
       <input
         type="date"
@@ -65,6 +110,9 @@ function ExpenseForm() {
         }
       />
 
+      <br />
+      <br />
+
       <input
         placeholder="Note"
         value={formData.note}
@@ -75,6 +123,9 @@ function ExpenseForm() {
           })
         }
       />
+
+      <br />
+      <br />
 
       <button type="submit">
         Add Expense

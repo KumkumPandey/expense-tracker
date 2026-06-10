@@ -6,9 +6,14 @@ function SummaryCards() {
 
   useEffect(() => {
     const loadExpenses = async () => {
-      const response = await API.get("/expenses");
-      setExpenses(response.data);
+      try {
+        const response = await API.get("/expenses");
+        setExpenses(response.data);
+      } catch (error) {
+        console.error(error);
+      }
     };
+
     loadExpenses();
   }, []);
 
@@ -22,15 +27,48 @@ function SummaryCards() {
       ? Math.max(...expenses.map((e) => Number(e.amount)))
       : 0;
 
+  const categoryTotals = {};
+
+  expenses.forEach((expense) => {
+    const category = expense.category;
+
+    if (!categoryTotals[category]) {
+      categoryTotals[category] = 0;
+    }
+
+    categoryTotals[category] += Number(expense.amount);
+  });
+
   return (
     <div>
       <h2>Summary</h2>
 
-      <p>Total Spent: ₹{totalSpent}</p>
+      <p>
+        <strong>Total Spent:</strong>{" "}
+        ₹{totalSpent}
+      </p>
 
-      <p>Highest Expense: ₹{highestExpense}</p>
+      <p>
+        <strong>Highest Expense:</strong>{" "}
+        ₹{highestExpense}
+      </p>
 
-      <p>Total Transactions: {expenses.length}</p>
+      <p>
+        <strong>Total Transactions:</strong>{" "}
+        {expenses.length}
+      </p>
+
+      <h3>Category Totals</h3>
+
+      <ul>
+        {Object.entries(categoryTotals).map(
+          ([category, total]) => (
+            <li key={category}>
+              {category}: ₹{total}
+            </li>
+          )
+        )}
+      </ul>
     </div>
   );
 }
