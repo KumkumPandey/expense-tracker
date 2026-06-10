@@ -1,13 +1,20 @@
 import { useState } from "react";
 import API from "../services/api";
 
-function ExpenseForm() {
-  const [formData, setFormData] = useState({
-    amount: "",
-    category: "Food",
-    date: "",
-    note: "",
-  });
+function ExpenseForm({
+  editingExpense,
+  setEditingExpense,
+}) {
+  const [formData, setFormData] = useState(
+    editingExpense
+      ? {
+          amount: editingExpense.amount,
+          category: editingExpense.category,
+          date: editingExpense.date,
+          note: editingExpense.note,
+        }
+      : { amount: "", category: "Food", date: "", note: "" }
+  );
 
   const [error, setError] = useState("");
 
@@ -16,15 +23,17 @@ function ExpenseForm() {
 
     setError("");
 
-    const today = new Date().toISOString().split("T")[0];
+    const today = new Date()
+      .toISOString()
+      .split("T")[0];
 
-    if (!formData.amount || Number(formData.amount) <= 0) {
-      setError("Amount must be greater than 0");
-      return;
-    }
-
-    if (!formData.category) {
-      setError("Please select a category");
+    if (
+      !formData.amount ||
+      Number(formData.amount) <= 0
+    ) {
+      setError(
+        "Amount must be greater than 0"
+      );
       return;
     }
 
@@ -34,14 +43,30 @@ function ExpenseForm() {
     }
 
     if (formData.date > today) {
-      setError("Future dates are not allowed");
+      setError(
+        "Future dates are not allowed"
+      );
       return;
     }
 
     try {
-      await API.post("/expenses", formData);
+      if (editingExpense) {
+        await API.put(
+          `/expenses/${editingExpense.id}`,
+          formData
+        );
 
-      alert("Expense Added");
+        alert("Expense Updated");
+
+        setEditingExpense(null);
+      } else {
+        await API.post(
+          "/expenses",
+          formData
+        );
+
+        alert("Expense Added");
+      }
 
       setFormData({
         amount: "",
@@ -49,25 +74,40 @@ function ExpenseForm() {
         date: "",
         note: "",
       });
+
+      window.location.reload();
     } catch (error) {
-  console.error(error);
-  setError("Failed to add expense");
-}
+      console.error(error);
+
+      setError(
+        "Failed to save expense"
+      );
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Add Expense</h2>
+  <form onSubmit={handleSubmit}>
+    <h2 className="mb-4">
+      {editingExpense
+        ? "✏️ Edit Expense"
+        : "➕ Add Expense"}
+    </h2>
 
-      {error && (
-        <p style={{ color: "red" }}>
-          {error}
-        </p>
-      )}
+    {error && (
+      <div className="alert alert-danger">
+        {error}
+      </div>
+    )}
+
+    <div className="mb-3">
+      <label className="form-label">
+        Amount
+      </label>
 
       <input
         type="number"
-        placeholder="Amount"
+        className="form-control"
+        placeholder="Enter amount"
         value={formData.amount}
         onChange={(e) =>
           setFormData({
@@ -76,11 +116,15 @@ function ExpenseForm() {
           })
         }
       />
+    </div>
 
-      <br />
-      <br />
+    <div className="mb-3">
+      <label className="form-label">
+        Category
+      </label>
 
       <select
+        className="form-select"
         value={formData.category}
         onChange={(e) =>
           setFormData({
@@ -90,17 +134,25 @@ function ExpenseForm() {
         }
       >
         <option value="Food">Food</option>
-        <option value="Transport">Transport</option>
+        <option value="Transport">
+          Transport
+        </option>
         <option value="Bills">Bills</option>
-        <option value="Entertainment">Entertainment</option>
+        <option value="Entertainment">
+          Entertainment
+        </option>
         <option value="Other">Other</option>
       </select>
+    </div>
 
-      <br />
-      <br />
+    <div className="mb-3">
+      <label className="form-label">
+        Date
+      </label>
 
       <input
         type="date"
+        className="form-control"
         value={formData.date}
         onChange={(e) =>
           setFormData({
@@ -109,12 +161,17 @@ function ExpenseForm() {
           })
         }
       />
+    </div>
 
-      <br />
-      <br />
+    <div className="mb-3">
+      <label className="form-label">
+        Note
+      </label>
 
-      <input
-        placeholder="Note"
+      <textarea
+        className="form-control"
+        rows="3"
+        placeholder="Optional note"
         value={formData.note}
         onChange={(e) =>
           setFormData({
@@ -123,15 +180,37 @@ function ExpenseForm() {
           })
         }
       />
+    </div>
 
-      <br />
-      <br />
+    <button
+      type="submit"
+      className="btn btn-primary"
+    >
+      {editingExpense
+        ? "Update Expense"
+        : "Add Expense"}
+    </button>
 
-      <button type="submit">
-        Add Expense
+    {editingExpense && (
+      <button
+        type="button"
+        className="btn btn-secondary ms-2"
+        onClick={() => {
+          setEditingExpense(null);
+
+          setFormData({
+            amount: "",
+            category: "Food",
+            date: "",
+            note: "",
+          });
+        }}
+      >
+        Cancel
       </button>
-    </form>
-  );
+    )}
+  </form>
+);
 }
 
 export default ExpenseForm;

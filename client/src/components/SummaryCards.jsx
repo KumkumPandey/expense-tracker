@@ -30,46 +30,94 @@ function SummaryCards() {
   const categoryTotals = {};
 
   expenses.forEach((expense) => {
-    const category = expense.category;
-
-    if (!categoryTotals[category]) {
-      categoryTotals[category] = 0;
+    if (!categoryTotals[expense.category]) {
+      categoryTotals[expense.category] = 0;
     }
 
-    categoryTotals[category] += Number(expense.amount);
+    categoryTotals[expense.category] += Number(
+      expense.amount
+    );
   });
 
   return (
-    <div>
-      <h2>Summary</h2>
+    <>
+      <div className="row g-3 mb-4">
+        <div className="col-md-4">
+          <div className="card shadow border-0">
+            <div className="card-body text-center">
+              <h3>
+                ₹
+                {totalSpent.toLocaleString(
+                  "en-IN"
+                )}
+              </h3>
+              <p className="mb-0">
+                Total Spent
+              </p>
+            </div>
+          </div>
+        </div>
 
-      <p>
-        <strong>Total Spent:</strong>{" "}
-        ₹{totalSpent}
-      </p>
+        <div className="col-md-4">
+          <div className="card shadow border-0">
+            <div className="card-body text-center">
+              <h3>
+                ₹
+                {highestExpense.toLocaleString(
+                  "en-IN"
+                )}
+              </h3>
+              <p className="mb-0">
+                Highest Expense
+              </p>
+            </div>
+          </div>
+        </div>
 
-      <p>
-        <strong>Highest Expense:</strong>{" "}
-        ₹{highestExpense}
-      </p>
+        <div className="col-md-4">
+          <div className="card shadow border-0">
+            <div className="card-body text-center">
+              <h3>{expenses.length}</h3>
+              <p className="mb-0">
+                Transactions
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <p>
-        <strong>Total Transactions:</strong>{" "}
-        {expenses.length}
-      </p>
+      <div className="card shadow border-0 mb-4">
+        <div className="card-body">
+          <h4 className="mb-3">
+            Category Totals
+          </h4>
 
-      <h3>Category Totals</h3>
+          <div className="row">
+            {Object.entries(
+              categoryTotals
+            ).map(([category, total]) => (
+              <div
+                className="col-md-4 mb-3"
+                key={category}
+              >
+                <div className="border rounded p-3">
+                  <strong>
+                    {category}
+                  </strong>
 
-      <ul>
-        {Object.entries(categoryTotals).map(
-          ([category, total]) => (
-            <li key={category}>
-              {category}: ₹{total}
-            </li>
-          )
-        )}
-      </ul>
-    </div>
+                  <div>
+                    ₹
+                    {total.toLocaleString(
+                      "en-IN"
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
 

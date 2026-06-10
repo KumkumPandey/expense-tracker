@@ -1,20 +1,45 @@
+import { useState } from "react";
 import ExpenseForm from "./components/ExpenseForm";
 import ExpenseTable from "./components/ExpenseTable";
 import SummaryCards from "./components/SummaryCards";
 import ExpenseChart from "./components/ExpenseChart";
 
 function App() {
+  const [editingExpense, setEditingExpense] =
+    useState(null);
+
   return (
-    <div>
-      <h1>Expense Tracker</h1>
+    <div className="container py-4">
+      <h1 className="text-center mb-4 fw-bold">
+        💰 Expense Tracker Dashboard
+      </h1>
 
-      <SummaryCards />
+      <div className="mb-4">
+        <SummaryCards />
+      </div>
 
-      <ExpenseChart />
+      <div className="card shadow border-0 mb-4">
+        <div className="card-body">
+          <ExpenseChart />
+        </div>
+      </div>
 
-      <ExpenseForm />
+      <div className="card shadow border-0 mb-4">
+        <div className="card-body">
+          <ExpenseForm
+            editingExpense={editingExpense}
+            setEditingExpense={setEditingExpense}
+          />
+        </div>
+      </div>
 
-      <ExpenseTable />
+      <div className="card shadow border-0">
+        <div className="card-body">
+          <ExpenseTable
+            setEditingExpense={setEditingExpense}
+          />
+        </div>
+      </div>
     </div>
   );
 }
