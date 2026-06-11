@@ -1,6 +1,13 @@
 import { useEffect, useState } from "react";
 import API from "../services/api";
 
+import {
+  FaMoneyBillWave,
+  FaChartLine,
+  FaReceipt,
+  FaCalculator,
+} from "react-icons/fa";
+
 function SummaryCards() {
   const [expenses, setExpenses] = useState([]);
 
@@ -17,107 +24,153 @@ function SummaryCards() {
     loadExpenses();
   }, []);
 
-  const totalSpent = expenses.reduce(
-    (sum, expense) => sum + Number(expense.amount),
-    0
+  const currentMonth = new Date().getMonth();
+  const currentYear = new Date().getFullYear();
+
+  const thisMonthExpenses = expenses.filter(
+    (expense) => {
+      const expenseDate = new Date(
+        expense.date
+      );
+
+      return (
+        expenseDate.getMonth() ===
+          currentMonth &&
+        expenseDate.getFullYear() ===
+          currentYear
+      );
+    }
   );
+
+  const totalSpentThisMonth =
+    thisMonthExpenses.reduce(
+      (sum, expense) =>
+        sum + Number(expense.amount),
+      0
+    );
 
   const highestExpense =
     expenses.length > 0
-      ? Math.max(...expenses.map((e) => Number(e.amount)))
+      ? Math.max(
+          ...expenses.map((expense) =>
+            Number(expense.amount)
+          )
+        )
       : 0;
 
-  const categoryTotals = {};
-
-  expenses.forEach((expense) => {
-    if (!categoryTotals[expense.category]) {
-      categoryTotals[expense.category] = 0;
-    }
-
-    categoryTotals[expense.category] += Number(
-      expense.amount
-    );
-  });
+  const averageExpense =
+    expenses.length > 0
+      ? (
+          expenses.reduce(
+            (sum, expense) =>
+              sum +
+              Number(expense.amount),
+            0
+          ) / expenses.length
+        ).toFixed(0)
+      : 0;
 
   return (
-    <>
-      <div className="row g-3 mb-4">
-        <div className="col-md-4">
-          <div className="card shadow border-0">
-            <div className="card-body text-center">
-              <h3>
-                ₹
-                {totalSpent.toLocaleString(
-                  "en-IN"
-                )}
-              </h3>
-              <p className="mb-0">
-                Total Spent
-              </p>
-            </div>
-          </div>
-        </div>
+    <div className="row g-4 mb-5">
 
-        <div className="col-md-4">
-          <div className="card shadow border-0">
-            <div className="card-body text-center">
-              <h3>
-                ₹
-                {highestExpense.toLocaleString(
-                  "en-IN"
-                )}
-              </h3>
-              <p className="mb-0">
-                Highest Expense
-              </p>
-            </div>
-          </div>
-        </div>
+      {/* THIS MONTH */}
+      <div className="col-xl-3 col-lg-6 col-md-6">
+        <div className="card stat-card-1 border-0 h-100">
+          <div className="card-body text-center">
 
-        <div className="col-md-4">
-          <div className="card shadow border-0">
-            <div className="card-body text-center">
-              <h3>{expenses.length}</h3>
-              <p className="mb-0">
-                Transactions
-              </p>
-            </div>
+            <FaMoneyBillWave
+              size={36}
+              className="mb-3 text-white"
+            />
+
+            <h3 className="fw-bold text-white">
+              ₹
+              {totalSpentThisMonth.toLocaleString(
+                "en-IN"
+              )}
+            </h3>
+
+            <p className="text-white mb-0">
+              This Month Spending
+            </p>
+
           </div>
         </div>
       </div>
 
-      <div className="card shadow border-0 mb-4">
-        <div className="card-body">
-          <h4 className="mb-3">
-            Category Totals
-          </h4>
+      {/* HIGHEST */}
+      <div className="col-xl-3 col-lg-6 col-md-6">
+        <div className="card stat-card-2 border-0 h-100">
+          <div className="card-body text-center">
 
-          <div className="row">
-            {Object.entries(
-              categoryTotals
-            ).map(([category, total]) => (
-              <div
-                className="col-md-4 mb-3"
-                key={category}
-              >
-                <div className="border rounded p-3">
-                  <strong>
-                    {category}
-                  </strong>
+            <FaChartLine
+              size={36}
+              className="mb-3 text-white"
+            />
 
-                  <div>
-                    ₹
-                    {total.toLocaleString(
-                      "en-IN"
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
+            <h3 className="fw-bold text-white">
+              ₹
+              {highestExpense.toLocaleString(
+                "en-IN"
+              )}
+            </h3>
+
+            <p className="text-white mb-0">
+              Highest Expense
+            </p>
+
           </div>
         </div>
       </div>
-    </>
+
+      {/* TRANSACTIONS */}
+      <div className="col-xl-3 col-lg-6 col-md-6">
+        <div className="card stat-card-3 border-0 h-100">
+          <div className="card-body text-center">
+
+            <FaReceipt
+              size={36}
+              className="mb-3 text-white"
+            />
+
+            <h3 className="fw-bold text-white">
+              {expenses.length}
+            </h3>
+
+            <p className="text-white mb-0">
+              Transactions
+            </p>
+
+          </div>
+        </div>
+      </div>
+
+      {/* AVERAGE */}
+      <div className="col-xl-3 col-lg-6 col-md-6">
+        <div className="card stat-card-4 border-0 h-100">
+          <div className="card-body text-center">
+
+            <FaCalculator
+              size={36}
+              className="mb-3 text-white"
+            />
+
+            <h3 className="fw-bold text-white">
+              ₹
+              {Number(
+                averageExpense
+              ).toLocaleString("en-IN")}
+            </h3>
+
+            <p className="text-white mb-0">
+              Average Expense
+            </p>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
   );
 }
 
