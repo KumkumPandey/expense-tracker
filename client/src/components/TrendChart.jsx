@@ -15,6 +15,9 @@ function TrendChart() {
   const [expenses, setExpenses] =
     useState([]);
 
+  const [viewType, setViewType] =
+    useState("month");
+
   useEffect(() => {
     const loadExpenses = async () => {
       try {
@@ -30,48 +33,82 @@ function TrendChart() {
     loadExpenses();
   }, []);
 
-  // Group expenses by date
-  const dateTotals = {};
+  const groupedData = {};
 
   expenses.forEach((expense) => {
-    if (!dateTotals[expense.date]) {
-      dateTotals[expense.date] = 0;
+    const expenseDate =
+      new Date(expense.date);
+
+    const key =
+      viewType === "year"
+        ? expenseDate.getFullYear()
+        : `${expenseDate.toLocaleString(
+            "default",
+            {
+              month: "short",
+            }
+          )}-${expenseDate.getFullYear()}`;
+
+    if (!groupedData[key]) {
+      groupedData[key] = 0;
     }
 
-    dateTotals[expense.date] += Number(
+    groupedData[key] += Number(
       expense.amount
     );
   });
 
-  const chartData = Object.entries(
-    dateTotals
-  )
-    .map(([date, amount]) => ({
-      date: new Date(
-        date
-      ).toLocaleDateString("en-IN", {
-        day: "2-digit",
-        month: "short",
-      }),
-
-      amount,
-    }))
-    .sort(
-      (a, b) =>
-        new Date(a.date) -
-        new Date(b.date)
+  const chartData =
+    Object.entries(groupedData).map(
+      ([period, amount]) => ({
+        period,
+        amount,
+      })
     );
 
   return (
     <div>
-      <div className="mb-4">
-        <h3 className="fw-bold text-dark">
-          📈 Expense Trend
-        </h3>
 
-        <p className="text-muted mb-0">
-          Daily spending overview
-        </p>
+      <div className="d-flex justify-content-between align-items-center mb-4">
+
+        <div>
+          <h3 className="fw-bold text-dark">
+            📈 Expense Trend
+          </h3>
+
+          <p className="text-muted mb-0">
+            Analyze your spending pattern
+          </p>
+        </div>
+
+        <div>
+          <button
+            className={`btn me-2 ${
+              viewType === "month"
+                ? "btn-primary"
+                : "btn-outline-primary"
+            }`}
+            onClick={() =>
+              setViewType("month")
+            }
+          >
+            Monthly
+          </button>
+
+          <button
+            className={`btn ${
+              viewType === "year"
+                ? "btn-primary"
+                : "btn-outline-primary"
+            }`}
+            onClick={() =>
+              setViewType("year")
+            }
+          >
+            Yearly
+          </button>
+        </div>
+
       </div>
 
       {chartData.length === 0 ? (
@@ -93,7 +130,7 @@ function TrendChart() {
             />
 
             <XAxis
-              dataKey="date"
+              dataKey="period"
             />
 
             <YAxis />
@@ -105,15 +142,15 @@ function TrendChart() {
                 ).toLocaleString(
                   "en-IN"
                 )}`,
-                "Amount",
+                "Spent",
               ]}
             />
 
             <Line
               type="monotone"
               dataKey="amount"
-              stroke="#2563eb"
-              strokeWidth={3}
+              stroke="#7c3aed"
+              strokeWidth={4}
               dot={{
                 r: 5,
               }}
