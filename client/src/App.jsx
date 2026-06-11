@@ -44,7 +44,7 @@ function App() {
             className="text-center mb-5"
           >
             <h1 className="dashboard-title">
-              💰 Mini Expense Tracker
+              Mini Expense Tracker
             </h1>
 
             <p className="text-muted fs-5">
@@ -54,17 +54,14 @@ function App() {
 
           {/* DASHBOARD */}
 
-          {activePage ===
-            "dashboard" && (
+          {activePage === "dashboard" && (
             <>
               <SummaryCards />
 
               <div className="card shadow-sm border-0 mb-4">
                 <div className="card-body">
                   <ExpenseForm
-                    editingExpense={
-                      editingExpense
-                    }
+                    editingExpense={null}
                     setEditingExpense={
                       setEditingExpense
                     }
@@ -82,23 +79,38 @@ function App() {
 
           {/* EXPENSES */}
 
-          {activePage ===
-            "expenses" && (
-            <div className="card shadow-sm border-0 mb-4">
-              <div className="card-body">
-                <ExpenseTable
-                  setEditingExpense={
-                    setEditingExpense
-                  }
-                />
+          {activePage === "expenses" && (
+            <>
+              {editingExpense && (
+                <div className="card shadow-sm border-0 mb-4">
+                  <div className="card-body">
+                    <ExpenseForm
+                      editingExpense={
+                        editingExpense
+                      }
+                      setEditingExpense={
+                        setEditingExpense
+                      }
+                    />
+                  </div>
+                </div>
+              )}
+
+              <div className="card shadow-sm border-0 mb-4">
+                <div className="card-body">
+                  <ExpenseTable
+                    setEditingExpense={
+                      setEditingExpense
+                    }
+                  />
+                </div>
               </div>
-            </div>
+            </>
           )}
 
           {/* BUDGET */}
 
-          {activePage ===
-            "budget" && (
+          {activePage === "budget" && (
             <div className="card shadow-sm border-0 mb-4">
               <div className="card-body">
                 <BudgetTracker />
@@ -108,8 +120,7 @@ function App() {
 
           {/* ANALYTICS */}
 
-          {activePage ===
-            "analytics" && (
+          {activePage === "analytics" && (
             <>
               <div className="card shadow-sm border-0 mb-4">
                 <div className="card-body">
