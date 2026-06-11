@@ -4,13 +4,27 @@ const fs = require("fs-extra");
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+    methods: [
+      "GET",
+      "POST",
+      "PUT",
+      "DELETE",
+    ],
+  })
+);
+
 app.use(express.json());
 
 const FILE_PATH =
   "./data/expenses.json";
 
-/* Create JSON file if missing */
+/* =========================
+   CREATE JSON FILE IF MISSING
+========================= */
+
 const initializeFile = async () => {
   try {
     const exists =
@@ -34,14 +48,32 @@ const initializeFile = async () => {
 
 initializeFile();
 
-/* Root Route */
+/* =========================
+   ROOT ROUTE
+========================= */
+
 app.get("/", (req, res) => {
-  res.send(
-    "Mini Expense Tracker Backend Running 🚀"
-  );
+  res.json({
+    app: "Mini Expense Tracker API",
+    version: "1.0.0",
+    status: "Running",
+  });
 });
 
-/* GET ALL EXPENSES */
+/* =========================
+   HEALTH CHECK
+========================= */
+
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "healthy",
+  });
+});
+
+/* =========================
+   GET ALL EXPENSES
+========================= */
+
 app.get(
   "/expenses",
   async (req, res) => {
@@ -74,7 +106,10 @@ app.get(
   }
 );
 
-/* ADD EXPENSE */
+/* =========================
+   ADD EXPENSE
+========================= */
+
 app.post(
   "/expenses",
   async (req, res) => {
@@ -176,7 +211,10 @@ app.post(
   }
 );
 
-/* UPDATE EXPENSE */
+/* =========================
+   UPDATE EXPENSE
+========================= */
+
 app.put(
   "/expenses/:id",
   async (req, res) => {
@@ -282,7 +320,10 @@ app.put(
   }
 );
 
-/* DELETE EXPENSE */
+/* =========================
+   DELETE EXPENSE
+========================= */
+
 app.delete(
   "/expenses/:id",
   async (req, res) => {
@@ -342,11 +383,18 @@ app.delete(
   }
 );
 
+/* =========================
+   SERVER START
+========================= */
+
 const PORT =
   process.env.PORT || 8000;
 
 app.listen(PORT, () => {
-  console.log(
-    `🚀 Server running on port ${PORT}`
-  );
+  console.log(`
+=================================
+ Mini Expense Tracker API
+ Running on Port ${PORT}
+=================================
+`);
 });
