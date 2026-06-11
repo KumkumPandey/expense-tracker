@@ -3,7 +3,7 @@ import axios from "axios";
 const API = axios.create({
   baseURL:
     import.meta.env.VITE_API_URL ||
-    "http://localhost:8000",
+    "https://mini-expense-tracker-api-rzh7.onrender.com",
 });
 
 export default API;
