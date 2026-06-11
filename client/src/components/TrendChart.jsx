@@ -42,12 +42,9 @@ function TrendChart() {
     const key =
       viewType === "year"
         ? expenseDate.getFullYear()
-        : `${expenseDate.toLocaleString(
-            "default",
-            {
-              month: "short",
-            }
-          )}-${expenseDate.getFullYear()}`;
+        : `${expenseDate.getFullYear()}-${String(
+            expenseDate.getMonth() + 1
+          ).padStart(2, "0")}`;
 
     if (!groupedData[key]) {
       groupedData[key] = 0;
@@ -58,17 +55,33 @@ function TrendChart() {
     );
   });
 
-  const chartData =
-    Object.entries(groupedData).map(
-      ([period, amount]) => ({
-        period,
-        amount,
-      })
-    );
+  const chartData = Object.entries(
+    groupedData
+  )
+    .map(([period, amount]) => ({
+      period,
+      amount,
+    }))
+    .sort((a, b) => {
+      if (viewType === "year") {
+        return (
+          Number(a.period) -
+          Number(b.period)
+        );
+      }
+
+      return (
+        new Date(
+          `${a.period}-01`
+        ) -
+        new Date(
+          `${b.period}-01`
+        )
+      );
+    });
 
   return (
     <div>
-
       <div className="d-flex justify-content-between align-items-center mb-4">
 
         <div>
@@ -131,12 +144,43 @@ function TrendChart() {
 
             <XAxis
               dataKey="period"
+              tickFormatter={(
+                value
+              ) => {
+                if (
+                  viewType === "year"
+                )
+                  return value;
+
+                const [
+                  year,
+                  month,
+                ] =
+                  value.split(
+                    "-"
+                  );
+
+                return new Date(
+                  year,
+                  month - 1
+                ).toLocaleString(
+                  "default",
+                  {
+                    month:
+                      "short",
+                    year:
+                      "2-digit",
+                  }
+                );
+              }}
             />
 
             <YAxis />
 
             <Tooltip
-              formatter={(value) => [
+              formatter={(
+                value
+              ) => [
                 `₹${Number(
                   value
                 ).toLocaleString(

@@ -10,29 +10,33 @@
     "id": 1781191826566,
     "amount": 3000,
     "category": "Education",
-    "date": "2026-06-08",
-    "note": "Online certification course"
+    "date": "2025-06-08",
+    "note": "Online certification course",
+    "customCategory": ""
   },
   {
     "id": 1781191865266,
     "amount": 800,
     "category": "Transport",
-    "date": "2026-06-07",
-    "note": "Metro and cab expenses"
+    "date": "2025-02-07",
+    "note": "Metro and cab expenses",
+    "customCategory": ""
   },
   {
     "id": 1781191902033,
     "amount": 1200,
     "category": "Entertainment",
-    "date": "2026-06-05",
-    "note": "Movie and snacks"
+    "date": "2024-06-05",
+    "note": "Movie and snacks",
+    "customCategory": ""
   },
   {
     "id": 1781191902034,
     "amount": 4500,
     "category": "Bills",
-    "date": "2026-05-28",
-    "note": "Internet and electricity"
+    "date": "2024-05-28",
+    "note": "Internet and electricity",
+    "customCategory": ""
   },
   {
     "id": 1781191902035,
@@ -40,6 +44,21 @@
     "category": "Shopping",
     "date": "2026-06-09",
     "note": "Clothes purchase"
+  },
+  {
+    "id": 1781201029066,
+    "amount": "3000",
+    "category": "Transport",
+    "date": "2025-10-20",
+    "note": "Business work\n",
+    "customCategory": ""
+  },
+  {
+    "id": 1781201052185,
+    "amount": "6500",
+    "category": "Entertainment",
+    "date": "2025-08-10",
+    "note": "Play park and gamming section",
+    "customCategory": ""
   }
 ]
-
